@@ -1,11 +1,13 @@
+import { canvas } from "../canvas.js";
 import { midX, midY } from "../globalValues.js";
 import Circle from "./Circle.js";
 
 export default class Projectile extends Circle{
-  constructor({x,y,radius,color,target=null}) {
+  constructor({x,y,radius,color,target=null,velocity= null}) {
     super(x,y,radius,color)
-    this.angle = !target  ?  Math.atan2(midX-x,midY-y) : Math.atan2(target.x-x,target.y-y)
-    this.velocity = this.calcInitialVelocity()
+    this.target = target
+    this.angle = null
+    this.velocity = velocity ?? this.calcInitialVelocity()
   }
   increaseVelocity(){
     return this.radius <= 10 ?  3.5 : this.radius <= 15 ? 
@@ -17,10 +19,18 @@ export default class Projectile extends Circle{
     this.y += this.velocity.y * (this.increaseVelocity())
   }
 
+  controlScope(){
+    return (this.x + this.radius <= canvas.width && 
+    this.x-this.radius > 0 && 
+    this.y + this.radius <= canvas.height && 
+    this.y-this.radius > 0 )
+  }
+
   calcInitialVelocity(){
+    this.angle = !this.target  ?  Math.atan2(midY-this.y,midX-this.x) : Math.atan2(this.target.y-this.y,this.target.x-this.x)
     return {
       x: Math.cos(this.angle),
-      y: Math.sin(this.angle)
+      y: Math.sin(this.angle),
     }
   }
 }
