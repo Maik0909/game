@@ -11,7 +11,6 @@ export default class Projectile extends Circle{
     this.id = "_" + Math.random().toString(36).substr(2, 9)
   }
   increaseVelocity(){
-    console.log(this.radius)
     return this.radius <= 10 ?  3.5 : this.radius <= 15 ? 
     3 : this.radius <= 25 ? 2.5 : this.radius <= 40 ? 2 : this.radius <= 60 ? 1.5 :1  
   }

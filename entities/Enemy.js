@@ -5,6 +5,16 @@ export default class Enemy extends Projectile{
     super(props)
   }
   
+
+  updateWhenHit(){
+    const n = 1.10
+    this.velocity.x *= n
+    this.velocity.y *= n
+    // const n = 1.15
+    // this.velocity.x += -(Math.random() * 2)
+    // this.velocity.y += -(Math.random() * 2)
+  }
+
   static createRandomCords(radius){
     let x,y
     if(Math.random() < 0.5){
@@ -19,6 +29,7 @@ export default class Enemy extends Projectile{
 
   static reduceEnemySize(enemy){
     gsap.to(enemy,{radius: enemy.radius-10})
+    enemy.updateWhenHit()
   }
 
 }
