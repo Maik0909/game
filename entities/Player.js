@@ -1,4 +1,3 @@
-import { canvas } from '../canvas.js'
 import { midX, midY } from '../globalValues.js'
 import Circle from './Circle.js'
 import Projectile from './Projectile.js'

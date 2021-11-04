@@ -37,7 +37,7 @@ export default class Game{
 
   }
 
-
+  
   #removeElementsOutOfScope(){
     this.projectiles = this.projectiles.filter( projectile => projectile.controlScope())
     this.particles =  this.particles.filter(({alpha}) => alpha > 0.1)
@@ -125,7 +125,7 @@ export default class Game{
     this.gameState.paused = false
     this.animate()
     this.spawn()
-    this.canvas.addEventListener("click", this.canvashandleClick)
+    addEventListener("click", this.canvashandleClick)
   }
 
 
@@ -148,7 +148,7 @@ export default class Game{
 
     this.score = 0
 
-    this.canvas.removeEventListener("click", this.canvashandleClick)
+    removeEventListener("click", this.canvashandleClick)
 
     const {playAgainButton} = getElements()
  
@@ -162,7 +162,7 @@ export default class Game{
 
       if(!this.gameState.paused){
 
-        const radius = Math.random() * (80-10) + 10
+        const radius = Math.random() * (100-10) + 10
         const enemyProps = {
           radius,
           color: colors[Math.floor(Math.random()* colors.length)],

@@ -1,5 +1,3 @@
-import { canvas } from "../canvas.js";
-import { colors } from "../globalValues.js";
 import Projectile from "./Projectile.js";
 
 export default class Enemy extends Projectile{
