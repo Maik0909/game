@@ -11,18 +11,20 @@ export default class Player extends Circle{
   }
 
   throw({clientX,clientY}){
-    
-    const projectileProps = {
-      x: midX,
-      y: midY,
-      radius: 5,
-      color: "rgba(133, 92, 248, 1)",
-      target:{
-        x:clientX,
-        y:clientY
+    if(!this.gameState.paused){
+      const projectileProps = {
+        x: midX,
+        y: midY,
+        radius: 5,
+        color: "rgba(133, 92, 248, 1)",
+        target:{
+          x:clientX,
+          y:clientY
+        }
       }
+      this.projectiles.push(new Projectile(projectileProps))
+
     }
-    this.projectiles.push(new Projectile(projectileProps))
   
   }
 }

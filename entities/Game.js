@@ -24,11 +24,15 @@ export default class Game{
     this.particles = []
     this.enemies = []
     this.score = 0
+    this.gameState = {
+      paused: false
+    }
 
     this.canvas = canvas
     this.canvashandleClick = this.player.throw.bind(this)
 
     this.spawnIntervalRef = null
+
     
 
   }
@@ -48,8 +52,8 @@ export default class Game{
   #nearbyElementsPointer(a,b){
     return Math.hypot(a.x-b.x,a.y-b.y)-b.radius-a.radius < 1
   }
-  #detectCollisions(){
 
+  #detectCollisions(){
     for (const [i,enemy] of this.enemies.entries()) {
         for (const [j,projectile] of this.projectiles.entries()) {
           if(this.#nearbyElementsPointer(projectile,enemy)){
@@ -81,20 +85,19 @@ export default class Game{
         if(this.#nearbyElementsPointer(this.player,enemy)){
           this.gameOver()
         }
+    }
   }
-  }
-
-
 
   animate(){
 
-      this.frame = requestAnimationFrame( () => this.animate())
+    this.frame = requestAnimationFrame( () => this.animate())
+    if(!this.gameState.paused){
       this.#render()
       this.#detectCollisions()
       this.#detectCollisionToPlayer()
       this.#removeElementsOutOfScope()
       this.#moveElements()
-
+    }
     // console.log(this.projectiles)
 
   }
@@ -103,18 +106,23 @@ export default class Game{
     [this.projectiles,this.enemies,this.particles].forEach( entities => entities.forEach(element => {element.update(); element.draw()}) )
   }
 
+
+  handleKeyboard({code}){
+    if(code === "KeyP"){
+        this.gameState.paused = !this.gameState.paused
+    }
+  }
+
   init(){
     const { startButton } = getElements()
     startButton.addEventListener("click", () => this.startGame("startGame"))
-
-    // setInterval(() => {
-    //   console.warn(this.projectiles,this.enemies,this.particles)
-    // }, 2000);
+    addEventListener("keyup",this.handleKeyboard.bind(this))
   }
 
   startGame(state){
     popup(this.score,state)
     scoreElement.innerText = this.score
+    this.gameState.paused = false
     this.animate()
     this.spawn()
     this.canvas.addEventListener("click", this.canvashandleClick)
@@ -132,6 +140,7 @@ export default class Game{
     this.projectiles = []
     this.frame = null
     this.spawnIntervalRef = null
+    this.gameState.paused = true
     
 
     const scoreCopy = this.score
@@ -150,17 +159,22 @@ export default class Game{
 
   spawn(){
     this.spawnIntervalRef = setInterval(() => {
-      const radius = Math.random() * (80-10) + 10
-      const enemyProps = {
-        radius,
-        color: colors[Math.floor(Math.random()* colors.length)],
-      }
 
-      const {x,y} = Enemy.createRandomCords(enemyProps.radius)
-      enemyProps["x"] = x
-      enemyProps["y"] = y
-      
-      this.enemies.push( new Enemy(enemyProps))
+      if(!this.gameState.paused){
+
+        const radius = Math.random() * (80-10) + 10
+        const enemyProps = {
+          radius,
+          color: colors[Math.floor(Math.random()* colors.length)],
+        }
+  
+        const {x,y} = Enemy.createRandomCords(enemyProps.radius)
+        enemyProps["x"] = x
+        enemyProps["y"] = y
+        
+        this.enemies.push( new Enemy(enemyProps))
+
+      }
 
     }, 1000);
   }
