@@ -18,14 +18,18 @@ export default class Game{
       color: "rgb(50,32,98)"
     }
 
-    this.player = null
+    this.player = new Player(this.playerProps)
     this.frame = null
     this.projectiles = []
     this.particles = []
     this.enemies = []
     this.score = 0
 
+    this.canvas = canvas
+    this.canvashandleClick = this.player.throw.bind(this)
+
     this.spawnIntervalRef = null
+    
 
   }
 
@@ -49,22 +53,19 @@ export default class Game{
     for (const [i,enemy] of this.enemies.entries()) {
         for (const [j,projectile] of this.projectiles.entries()) {
           if(this.#nearbyElementsPointer(projectile,enemy)){
-            console.log(this.enemies)
             Particle.generateParticles(enemy,projectile,this.particles)     
-            
-            console.log(enemy.hiddenRadius,enemy.radius)
-            if(enemy.hiddenRadius-10 >= 3){
-
-              this.score += 100
+         
+            if(enemy.radius-10 >= 5){
+              this.score += 10
+              scoreElement.innerText = this.score
               Enemy.reduceEnemySize(enemy)
-              this.projectiles = this.projectiles.filter((_,k) => j !== k)
+              this.projectiles =  this.projectiles.filter( ({id}) => id !== projectile.id )
               
             }else{
-
-              this.score += 250
+              this.score += 25
               scoreElement.innerText = this.score
-              this.enemies = this.enemies.filter((_,k) => i !== k)
-              this.projectiles = this.projectiles.filter((_,k) => j !== k)
+              this.projectiles =  this.projectiles.filter( ({id}) => id !== projectile.id )
+              this.enemies = this.enemies.filter( ({id}) => id !== enemy.id)
               
             }
 
@@ -86,12 +87,13 @@ export default class Game{
 
 
   animate(){
-    this.frame = requestAnimationFrame( () => this.animate())
-    this.#render()
-    this.#detectCollisions()
-    this.#detectCollisionToPlayer()
-    this.#removeElementsOutOfScope()
-    this.#moveElements()
+
+      this.frame = requestAnimationFrame( () => this.animate())
+      this.#render()
+      this.#detectCollisions()
+      this.#detectCollisionToPlayer()
+      this.#removeElementsOutOfScope()
+      this.#moveElements()
 
     // console.log(this.projectiles)
 
@@ -103,38 +105,46 @@ export default class Game{
 
   init(){
     const { startButton } = getElements()
-    startButton.addEventListener("click",() => this.startGame())
+    startButton.addEventListener("click", () => this.startGame("startGame"))
+
+    // setInterval(() => {
+    //   console.warn(this.projectiles,this.enemies,this.particles)
+    // }, 2000);
   }
 
-  startGame(state="startGame"){
-    //remove popup
+  startGame(state){
     popup(this.score,state)
     scoreElement.innerText = this.score
-    //add player
-    this.player = new Player(this.playerProps)
-    addEventListener("click",this.player.throw.bind(this))
     this.animate()
     this.spawn()
-    setInterval(() => {
-      console.log(this.enemies)
-    }, 2000);
+    this.canvas.addEventListener("click", this.canvashandleClick)
   }
 
+
   gameOver(){
+
     cancelAnimationFrame(this.frame)
+    ctx.clearRect(0,0,canvas.width,canvas.height)
 
     this.ceaseSpawn()
     this.enemies = []
     this.particles = []
     this.projectiles = []
+    this.frame = null
+    this.spawnIntervalRef = null
+    
 
     const scoreCopy = this.score
     popup(scoreCopy,"gameOver")
 
     this.score = 0
 
+    this.canvas.removeEventListener("click", this.canvashandleClick)
+
     const {playAgainButton} = getElements()
-    playAgainButton.addEventListener("click", () => this.startGame("gameOver"))
+ 
+    playAgainButton.addEventListener("click", () => this.startGame("gameOver"),{once: true})
+
   }
 
 
@@ -143,7 +153,6 @@ export default class Game{
       const radius = Math.random() * (80-10) + 10
       const enemyProps = {
         radius,
-        hiddenRadius: radius,
         color: colors[Math.floor(Math.random()* colors.length)],
       }
 
@@ -159,6 +168,7 @@ export default class Game{
   ceaseSpawn(){
     clearInterval(this.spawnIntervalRef)
   }
+
 
 
 }

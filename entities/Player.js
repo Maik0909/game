@@ -11,6 +11,7 @@ export default class Player extends Circle{
   }
 
   throw({clientX,clientY}){
+    
     const projectileProps = {
       x: midX,
       y: midY,
@@ -22,6 +23,7 @@ export default class Player extends Circle{
       }
     }
     this.projectiles.push(new Projectile(projectileProps))
+  
   }
 }
 

@@ -27,8 +27,8 @@ export default class Particle extends Projectile{
         y: projectile.y,
         color: enemy.color,
         velocity:{
-          x: Math.random() - 0.5,
-          y: Math.random() - 0.5
+          x: Math.random() - Math.random() * 3,
+          y: Math.random() - Math.random() * 3
         }
       }))
     }
@@ -36,10 +36,8 @@ export default class Particle extends Projectile{
   }
 
   update(){
-    this.x += this.velocity.x * (this.increaseVelocity())
-    this.y += this.velocity.y * (this.increaseVelocity())
-    // this.x += this.velocity.x * this.friction
-    // this.y += this.velocity.y * this.friction
+    this.x += this.velocity.x * this.friction
+    this.y += this.velocity.y * this.friction
     this.alpha  = this.alpha -0.001 >= 0 ? this.alpha-0.001 : this.alpha
   }
   

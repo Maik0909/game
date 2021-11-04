@@ -8,15 +8,17 @@ export default class Projectile extends Circle{
     this.target = target
     this.angle = null
     this.velocity = velocity ?? this.calcInitialVelocity()
+    this.id = "_" + Math.random().toString(36).substr(2, 9)
   }
   increaseVelocity(){
+    console.log(this.radius)
     return this.radius <= 10 ?  3.5 : this.radius <= 15 ? 
-    3 : this.radius <= 25 ? 2.5 : this.radius <= 50 ? 2 : this.radius <= 70 ? 1.5 :1  
+    3 : this.radius <= 25 ? 2.5 : this.radius <= 40 ? 2 : this.radius <= 60 ? 1.5 :1  
   }
 
   update(){
-    this.x += this.velocity.x * (this.increaseVelocity())
-    this.y += this.velocity.y * (this.increaseVelocity())
+    this.x += this.velocity.x //* (this.increaseVelocity())
+    this.y += this.velocity.y //* (this.increaseVelocity())
   }
 
   controlScope(){
@@ -29,8 +31,8 @@ export default class Projectile extends Circle{
   calcInitialVelocity(){
     this.angle = !this.target  ?  Math.atan2(midY-this.y,midX-this.x) : Math.atan2(this.target.y-this.y,this.target.x-this.x)
     return {
-      x: Math.cos(this.angle),
-      y: Math.sin(this.angle),
+      x: Math.cos(this.angle) * this.increaseVelocity(),
+      y: Math.sin(this.angle) * this.increaseVelocity(),
     }
   }
 }
