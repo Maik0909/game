@@ -20,7 +20,7 @@
         ${score}
       </span>
       <span>points</span>
-      <button id="playAgain">Play again</button>`
+      <button class="secondary" id="playAgain">Play again</button>`
     }
     d.body.appendChild(div)
     return div.button
