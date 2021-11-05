@@ -8,7 +8,9 @@ import Player from "./Player.js";
 const {scoreElement} = getElements()
 
 export default class Game{
-
+  #MAX_ENEMY_SIZE
+  #MIN_ENEMY_SIZE
+  
   constructor(){
 
     this.playerProps = {
@@ -28,16 +30,23 @@ export default class Game{
       paused: false
     }
 
+    this.#MIN_ENEMY_SIZE = 10
+    this.#MAX_ENEMY_SIZE = this.#calcMaxEnemySize()
+    
     this.canvas = canvas
     this.canvashandleClick = this.player.throw.bind(this)
 
     this.spawnIntervalRef = null
 
-    
-
   }
 
   
+  #calcMaxEnemySize(){
+    let w = innerWidth
+    return w <= 320 ? 30 : w <= 375 ? 40 : w <= 425 ? 45 : w <= 768 ? 55 : w <= 1024 ? 60 : w <= 1440 ? 80 : 105
+
+  }
+
   #removeElementsOutOfScope(){
     this.projectiles = this.projectiles.filter( projectile => projectile.controlScope())
     this.particles =  this.particles.filter(({alpha}) => alpha > 0.1)
@@ -113,10 +122,20 @@ export default class Game{
     }
   }
 
+  handleVisibility(){
+    this.gameState.paused = document.visibilityState !== "visible"
+  }
+
   init(){
     const { startButton } = getElements()
     startButton.addEventListener("click", () => this.startGame("startGame"))
     addEventListener("keyup",this.handleKeyboard.bind(this))
+    document.addEventListener("visibilitychange", this.handleVisibility.bind(this))
+    addEventListener("load", () => {
+      document.getElementById("start").classList.remove("blocked")
+    })
+
+
   }
 
   startGame(state){
@@ -162,7 +181,7 @@ export default class Game{
 
       if(!this.gameState.paused){
 
-        const radius = Math.random() * (100-10) + 10
+        const radius = Math.random() * (this.#MAX_ENEMY_SIZE-this.#MIN_ENEMY_SIZE) + this.#MIN_ENEMY_SIZE
         const enemyProps = {
           radius,
           color: colors[Math.floor(Math.random()* colors.length)],
