@@ -26,10 +26,10 @@ export default class Projectile extends Circle{
 
   isWithinRange(){
 
-    return (this.x  <= innerWidth + this.radius && 
-    this.x > this.radius  && 
+    return (this.x <= innerWidth + this.radius && 
+    this.x+this.radius >= 0  && 
     this.y  <= innerHeight + this.radius && 
-    this.y > this.radius )
+    this.y+this.radius >= 0 )
 
     // return (this.x + this.radius <= innerWidth && 
     //   this.x-this.radius > 0 && 

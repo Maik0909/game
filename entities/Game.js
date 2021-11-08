@@ -65,7 +65,7 @@ export default class Game{
   }
 
   #nearbyElementsPointer(a,b){
-    return Math.hypot(a.x-b.x,a.y-b.y)-b.radius-a.radius < 1
+    return Math.hypot(a.x-b.x,a.y-b.y)-b.radius-a.radius <= 0
   }
 
   #detectCollisions(){
@@ -162,6 +162,8 @@ export default class Game{
 
     GameUI.drawPlayer.call(this.player)
     this.player.draw()
+    console.log("player.x",this.player.x, "player.y",this.player.y)
+
 
   })
     
@@ -240,7 +242,7 @@ export default class Game{
 
       if(!this.gameState.paused){
 
-        console.log(this.gameState.numberOfEnemiesThrown,this.gameState.numberOfEnemiesToThrow,this.gameState.level,this.enemies.length)
+        // console.log(this.gameState.numberOfEnemiesThrown,this.gameState.numberOfEnemiesToThrow,this.gameState.level,this.enemies.length)
 
         if(this.gameState.numberOfEnemiesThrown !== this.gameState.numberOfEnemiesToThrow){
           this.enemies.push( Enemy.crateRandomEnemy())

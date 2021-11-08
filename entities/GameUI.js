@@ -1,6 +1,5 @@
 import { d } from "../globalValues.js";
 
-
 export default class GameUI  {
 
   constructor(x,y){
@@ -67,6 +66,8 @@ export default class GameUI  {
     const player = document.querySelector("svg")
     player.style.right = (this.x - this.radius) + "px"
     player.style.top = (this.y  - this.radius) + "px"
+
+    console.log("right position",player.style.right, "top position",player.style.top)
   }
 
 }

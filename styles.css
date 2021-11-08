@@ -233,13 +233,25 @@ input::placeholder{
 body{
   margin: 0;
   background-color:  rgb(239,233,253);
+  overflow: hidden;
 }
 div,span{
- 
+  text-align: center;
   text-transform: uppercase;
   letter-spacing: 3px;
   color: rgb(20, 4, 32);
 }
+
+span{
+  text-align: center;
+}
+
+#score,#level{
+  display: inline-block;
+  width: 2.5rem;
+}
+
+
 canvas{
   overflow: hidden;
   z-index: 0;

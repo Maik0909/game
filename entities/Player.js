@@ -1,7 +1,6 @@
-import { ctx } from '../canvas.js'
-import { midX, midY } from '../globalValues.js'
+
 import Circle from './Circle.js'
-import Projectile from './Projectile.js'
+
 
 export default class Player extends Circle {
 
