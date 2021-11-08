@@ -10,7 +10,7 @@ canvas.height = innerHeight * devicePixelRatio
 
 const ctx = canvas.getContext('2d')
 ctx.scale(scale,scale)
-// ctx.fillStyle = "black"
+
 
 
 console.log(canvas.width,canvas.height,innerWidth,innerHeight)

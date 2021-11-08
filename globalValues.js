@@ -12,7 +12,8 @@ const getElements = () => {
   return {
     scoreElement: d.getElementById("score"),
     startButton:d.getElementById("start"),
-    playAgainButton: d.getElementById("playAgain")
+    playAgainButton: d.getElementById("playAgain"),
+    levelElement: d.getElementById("level")
   }
 }
 

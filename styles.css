@@ -4,8 +4,14 @@
   font-family: "DM Mono";
   color: rgb(20, 4, 32);
   box-sizing: border-box;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  user-select: none;
+  font-smooth: always;
 
 }
+
+
 
 #info{
   margin-top: 2rem;
@@ -13,24 +19,65 @@
   display: flex;
   justify-content: space-evenly;
   position: absolute;
-  z-index: 10;
 }
-
-
 
 @keyframes appear {
   from{
     opacity: 0;
-    transform: translateY(15px);
+    transform: translateY(-15px);
   }to{
     opacity: 1;
     transform: translateY(0px);
   }
 }
 
+@keyframes appearNot {
+  from{
+    opacity: 0;
+    transform: scale(0);
+    transform: translateY(-30px);
+  }to{
+    opacity: 1;
+    transform: scale(1);
+    transform: translateY(0px);
+  }
+}
 
-#gameOver.disappear, #startGame.disappear{
-  animation: appear 300ms ease-in-out reverse forwards;
+@keyframes disappearNot {
+  from{
+    opacity: 1;
+    transform: scale(1);
+    transform: translateY(0px);
+  }to{
+    opacity: 0;
+    transform: scale(0);
+    transform: translateY(-30px);
+  }
+}
+
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes scaling {
+  0%{
+    transform: scale(0.8,0.8);
+  }50% {
+    transform: scale(1,1);
+  } 100%{
+    transform: scale(0.8,0.8);
+  }
+}
+
+svg{
+  position: absolute;
+  z-index: 10;
 }
 
 #gameOver,#startGame{
@@ -38,6 +85,7 @@
   height: 45%;
   min-height: 200px;
   max-width: 300px;
+  z-index: 20;
   padding: 0 1.5rem;
   background-color: white;
   will-change: transform;
@@ -55,6 +103,33 @@
   margin: auto;
 
 }
+
+.notification{
+  border-radius: 30px;
+  background: white;
+  position: absolute;
+  z-index: 25;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* box-shadow: 0px 15px 10px -10px rgba(22, 11, 65, 0.1); */
+
+}
+
+
+#gameOver.disappear, #startGame.disappear{
+  animation: appear 300ms ease-out reverse forwards;
+}
+
+
+.notification.appearNot{
+  animation: appearNot 350ms ease-out forwards;
+}
+
+.notification.disappearNot{
+  animation: disappearNot 350ms ease-out forwards;
+}
+
 
 .inputContainer{
   width: 95%;
@@ -98,9 +173,6 @@ button{
 .primary{
   color: #FBEAFB;
   background: #7957FB;
-  /* border: 1px solid #6846E8; */
-  /* box-shadow: 0px 15px 10px -10px rgba(22, 11, 65, 0.1); */
-
   /* box-shadow: 0px 4px 15px rgba(87, 143, 255, 0.3); */
 }
 
@@ -121,7 +193,7 @@ label{
   letter-spacing: normal;
   text-transform: none;
   font-size: 1rem;
-  color: #554E70;
+  color: #7C6E9A;
   padding-bottom: 0.25rem;
   transition: all 300ms ease;
 }
@@ -131,13 +203,17 @@ input{
   background: none;
   height: 30px;
   outline: none;
+  color: #240B33;
 }
 
 input,input::placeholder{
   font-size: 1.25rem;
   font-family: "Inter";
   font-weight: 500;
-  color: #140C35;
+}
+
+input::placeholder{
+  color: #523664;
 }
 
 
@@ -159,9 +235,7 @@ body{
   background-color:  rgb(239,233,253);
 }
 div,span{
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-  user-select: none;
+ 
   text-transform: uppercase;
   letter-spacing: 3px;
   color: rgb(20, 4, 32);
