@@ -163,7 +163,6 @@ export default class Game{
     GameUI.drawPlayer.call(this.player)
     this.player.draw()
 
-
   })
     
 
