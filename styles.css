@@ -12,13 +12,45 @@
 }
 
 
-
 #info{
   margin-top: 2rem;
   width: 100vw;
   display: flex;
   justify-content: space-evenly;
   position: absolute;
+}
+
+#keys{
+  margin-bottom: 2rem;
+  width: 100vw;
+  display: flex;
+  /* align-items: center; */
+  justify-content: center;
+  position: absolute;
+  bottom: 0;
+}
+
+.key{
+  width: 150px;
+  height: 80px;
+  /* padding: 1rem; */
+  background-color: #FCFCFF;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.key > div, .key > span{
+  animation: all 400ms ease-in-out;
+}
+
+#keys > div:first-child{
+  margin-right: 1rem;
+}
+#keys > div:last-child{
+  margin-left: 1rem;
 }
 
 @keyframes appear {
@@ -83,9 +115,9 @@ svg{
 #gameOver,#startGame{
   width: 90%;
   height: 45%;
-  min-height: 200px;
+  min-height: 280px;
   max-width: 300px;
-  z-index: 20;
+  z-index: 50;
   padding: 0 1.5rem;
   background-color: white;
   will-change: transform;
@@ -109,9 +141,11 @@ svg{
   background: white;
   position: absolute;
   z-index: 25;
+  text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
+  will-change: transform;
   /* box-shadow: 0px 15px 10px -10px rgba(22, 11, 65, 0.1); */
 
 }
@@ -233,18 +267,19 @@ input::placeholder{
 body{
   margin: 0;
   background-color:  rgb(239,233,253);
+  width: 100vw;
+  height: 100vh;
   overflow: hidden;
+
 }
-div,span{
+div > span{
   text-align: center;
   text-transform: uppercase;
   letter-spacing: 3px;
   color: rgb(20, 4, 32);
 }
 
-span{
-  text-align: center;
-}
+
 
 #score,#level{
   display: inline-block;

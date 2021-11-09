@@ -1,6 +1,6 @@
-import { canvas } from "../canvas.js";
-import { midX, midY } from "../globalValues.js";
+import { ctx } from "../globals.js";
 import Circle from "./Circle.js";
+import Game from "./Game.js";
 
 export default class Projectile extends Circle{
 
@@ -13,6 +13,13 @@ export default class Projectile extends Circle{
     this.id = "_" + Math.random().toString(36).substr(2, 9)
     this.type = type  // ["classic","reverse","cross"]
     this.acceleration = this.target !== null ?  4 : this.accelerate()
+  }
+
+  draw(){
+    ctx.beginPath()
+    ctx.arc(this.x,this.y,this.radius,0,Math.PI*2,false)
+    ctx.fillStyle = this.color 
+    ctx.fill()
   }
   accelerate(){
     return this.radius <= 5 ? 3.75 : this.radius  <= 10 ?  3.25 : this.radius <= 15 ? 
@@ -38,7 +45,7 @@ export default class Projectile extends Circle{
   }
 
   calcInitialVelocity(){
-    this.angle = !this.target  ?  Math.atan2(midY-this.y,midX-this.x) : Math.atan2(this.target.y-this.y,this.target.x-this.x)
+    this.angle = !this.target  ?  Math.atan2(Game.midY-this.y,Game.midX-this.x) : Math.atan2(this.target.y-this.y,this.target.x-this.x)
     return {
       x: Math.cos(this.angle) * this.accelerate(),
       y: Math.sin(this.angle) * this.accelerate(),

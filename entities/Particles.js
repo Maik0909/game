@@ -1,4 +1,4 @@
-import { ctx } from "../canvas.js";
+import { ctx } from "../globals.js";
 import Projectile from "./Projectile.js";
 
 export default class Particle extends Projectile{

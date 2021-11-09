@@ -1,4 +1,6 @@
-import {ctx} from '../canvas.js'
+import { ctx } from "../globals.js"
+
+
 
 export default class Circle{
   constructor(x,y,radius,color){
@@ -6,6 +8,7 @@ export default class Circle{
     this.y = y
     this.radius = radius
     this.color = color
+
   }
   draw(){
     ctx.beginPath()
