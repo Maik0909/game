@@ -24,7 +24,7 @@ export default class Enemy extends Projectile{
   static updateWhenHit(enemy,projectile,value=10){
 
     const { type } = projectile
-    const n = type === "reverse" ? -1.5 : type === "cross" ? 1.75 : 1.10
+    const n = type === "reverse" ? -2 : type === "cross" ? 2.5 : 1.10
     enemy.velocity.x *= n
     enemy.velocity.y *= n
 

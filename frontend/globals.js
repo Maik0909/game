@@ -5,9 +5,6 @@ const ctx = canvasInstance.ctx
 const canvas = canvasInstance.canvasElement
 canvasInstance.resizeCanvas()
 
-
-
-
 const getElements = () => {
   return {
     scoreElement: document.getElementById("score"),

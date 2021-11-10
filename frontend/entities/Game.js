@@ -1,4 +1,3 @@
-import KeyboardInteractions from "../components/KeyboardInteractions.js";
 import Notification from "../components/Notification.js";
 import Popup from "../components/Popup.js";
 import { getElements, canvas, ctx, canvasInstance} from "../globals.js";
@@ -7,6 +6,8 @@ import GameState from "./GameState.js";
 import Particle from "./Particles.js";
 import Player from "./Player.js";
 import Projectile from "./Projectile.js";
+import SocketConnection from "./Socket.js";
+
 
 const { scoreElement,levelElement } = getElements()
 
@@ -24,10 +25,7 @@ export default class Game{
     this.score = 0
 
     this.gameState = new GameState()
-    this.rewards = {
-      reverseBullets: 0,
-      crossBullets: 0,
-    }
+
     this.canvas = canvas
     this.canvashandleClick = this.saveProjectiles.bind(this)
 
@@ -37,7 +35,7 @@ export default class Game{
     this.player = new Player(Game.midX,Game.midY)
     this.notification = new Notification(this.player)
     this.popup =  new Popup(this.score)
-    this.keyboardInteractions = new KeyboardInteractions(this.gameState.reverseBulletsActivated,this.gameState.crossBulletsActivated)
+    this.connection = new SocketConnection("http://localhost:3000")
 
     this.resizeObserver = new ResizeObserver(this.handleResizeEntries.bind(this))
     this.resizeObserver.observe(document.body)
@@ -109,8 +107,9 @@ export default class Game{
   }
 
   animate(){
-
-    this.frame = requestAnimationFrame( () => this.animate())
+    setTimeout(() => {
+      this.frame = requestAnimationFrame( () => this.animate())
+    }, 1000/120);
     if(!this.gameState.paused){
       this.#render()
       this.#detectCollisions()
@@ -156,7 +155,7 @@ export default class Game{
           this.gameState.reverseBulletsActivated = false
         }
       }
-      this.keyboardInteractions.manage(this.gameState.reverseBulletsActivated,this.gameState.crossBulletsActivated)
+      this.gameState.manage()
 
     }
    
@@ -219,8 +218,8 @@ export default class Game{
     this.gameState.numberOfEnemiesToThrow = 2
     this.gameState.numberOfEnemiesThrown = 0
     this.gameState.level = 1
-    this.rewards.reverseBullets = 0
-    this.rewards.crossBullets = 0
+    this.gameState.rewards.reverseBullets = 0
+    this.gameState.rewards.crossBullets = 0
     
 
     this.popup.create("gameOver")
@@ -243,10 +242,10 @@ export default class Game{
         this.gameState.numberOfEnemiesThrown = 0
         this.gameState.numberOfEnemiesToThrow += 2  
         this.gameState.level++
-        this.rewards.crossBullets += 2
-        this.rewards.reverseBullets += 5
+        this.gameState.rewards.crossBullets += 2
+        this.gameState.rewards.reverseBullets += 5
         levelElement.innerText = this.gameState.level
-        this.notification.emit(`reverse bullets: ${this.rewards.reverseBullets}, blackhole bullets: ${this.rewards.crossBullets}`)
+        this.notification.emit(`reverse bullets: ${this.gameState.rewards.reverseBullets}, blackhole bullets: ${this.gameState.rewards.crossBullets}`)
       }
     }, 2000)
 
@@ -286,21 +285,20 @@ export default class Game{
           y:clientY
         }
       }
-      if(this.gameState.reverseBulletsActivated && this.rewards.reverseBullets > 0){
+      if(this.gameState.reverseBulletsActivated && this.gameState.rewards.reverseBullets > 0){
         projectileProps["type"] = "reverse"
-        // projectileProps.color = "rgba(79,34,124,1)"
         projectileProps.color = "rgba(249,132,251,1)"
-        this.rewards.reverseBullets--
+        this.gameState.rewards.reverseBullets--
       }
 
-      if(this.gameState.crossBulletsActivated && this.rewards.crossBullets > 0){
+      if(this.gameState.crossBulletsActivated && this.gameState.rewards.crossBullets > 0){
         projectileProps["type"] = "cross"
         projectileProps["color"] = "rgba(113,33,212,0.8)"
-        this.rewards.crossBullets--
+        this.gameState.rewards.crossBullets--
       }
 
       this.projectiles.push(new Projectile(projectileProps))
-
+      this.gameState.unselect()
     }
   
   }
@@ -327,8 +325,8 @@ export default class Game{
     this.gameState.numberOfEnemiesThrown = 0
     this.gameState.level = 1
     this.score = 0
-    this.rewards.reverseBullets = 0
-    this.rewards.crossBullets = 0
+    this.gameState.rewards.reverseBullets = 0
+    this.gameState.rewards.crossBullets = 0
 
 
     removeEventListener("click", this.canvashandleClick)

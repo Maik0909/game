@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "nodemon index.js"
   },
   "keywords": [],
   "author": "Maikol Pedroza <maikolpedroza0@gmail.com>",
@@ -13,5 +13,8 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "socket.io": "^4.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
   }
 }
